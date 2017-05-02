@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Reset</title>
+    <script>
+// JavaScript source code
+
+var webServiceUrl = "https://api.spotify.com/v1/";
+
+
+//sends the asynchronous request to the web services
+function callWebService(methodAndArguments, callBack, methodChoice) {
+    //build request URL string
+
+   var requestUrl = webServiceUrl + methodAndArguments;
+
+    try {
+        //creates request
+        var asyncRequest = new XMLHttpRequest();
+
+        //set up callback funtion and store it
+
+        //send the asynchronous request
+  asyncRequest.addEventListener("readystatechange", function () { callBack(asyncRequest, methodChoice); }, false);
+        asyncRequest.open("GET", requestUrl, true);
+        asyncRequest.setRequestHeader("Accept", "application/json; charset=utf-8");//DELETE?
+        asyncRequest.send();//sends request
+
+
+    } catch (exception) {
+        alert("Request Failed");
+    }
+}
+
+//Parse JSON Data and display
+function parseData(asyncRequest, methodChoice) {
+
+    //if request completed successfully, process the response
+    if (asyncRequest.readyState == 4 && asyncRequest.status == 200) {
+        //convert JSON string to an Object
+        var data = JSON.parse(asyncRequest.responseText);
+        if (methodChoice == 0) {
+            getDetails(data);
+        }
+        if (methodChoice == 1) {
+            displayArtistsNames(data);//displays data on page
+        }
+        if (methodChoice == 2) {
+            displayRelatedArtists(data);
+        }
+        if (methodChoice == 3) {
+            displayAlbums(data);
+        }
+    }
+  
+}
+//using DOM to display artists
+function displayArtistsNames(data) {
+
+    //get placeholder element from page
+    var listBox = document.getElementById("Artists");
+    listBox.innerHTML = "";
+    document.getElementById("searchResultText").innerHTML = "Search Results:";
+    for (var i = 0; i < data.artists.items.length; i++) {
+        var entry = document.createElement("ul");
+        //var field = document.createElement("fieldset");
+        entry.onclick = function () { callSpecificDetails(data, this); };
+        entry.id = i;
+        entry.innerHTML = ("Artist Name: "+ data.artists.items[i].name);
+        //field.appendChild(entry);
+        listBox.appendChild(entry);
+
+    }
+
+
+}
+function callSpecificDetails(data, entry) {
+    //build request URL string
+    var id = data.artists.items[entry.id].id;
+    var requestUrl = "artists/" + id;
+    callWebService(requestUrl,parseData, 0);
+}
+
+function getDetails(data) {
+
+    document.getElementById("Artists").innerHTML = "";
+    var listBox = document.getElementById("searchresults");
+    listBox.innerHTML = "";
+    var nameHolder = document.createElement("h2");
+    nameHolder.innerHTML = ("Artist Name: " + data.name);
+    var genres = document.createElement("h3");
+    genres.innerHTML = "Genres:";
+    listBox.appendChild(nameHolder);
+    
+    //popularity
+    var popularity = document.createElement("h3");
+    popularity.innerHTML = ("Popularity: " + data.popularity);
+    nameHolder.appendChild(popularity);
+    nameHolder.appendChild(genres);
+
+    var genreholder = document.createElement("ul");
+    genreholder.innerHTML = "";
+    //GENRES
+    if (data.genres.length == 0) {
+        var entry = document.createElement("li");
+        entry.innerHTML = "none";
+        listBox.appendChild(entry);
+    } else {
+        for (var i = 0; i < data.genres.length; i++) {
+            var entry = document.createElement("li");
+            entry.id = i;
+            entry.innerHTML = data.genres[i];
+            genreholder.appendChild(entry);
+        }
+      genres.appendChild(genreholder);
+    }
+    
+
+    //five related artists
+    var id = data.id;
+    var relatedArtists = document.createElement("h3");
+    relatedArtists.innerHTML = "Related Artists";
+    relatedArtists.setAttribute("id", "relatedArtists");
+    nameHolder.appendChild(relatedArtists);
+    callWebService(("artists/" + id + "/related-artists"), parseData, 2);
+   
+
+    
+    //three albums or singles w/title adn image.
+    var threeAlbums = document.createElement("h3");
+    threeAlbums.innerHTML = "Albums: "
+    threeAlbums.setAttribute("id", "threeAlbums");
+    nameHolder.appendChild(threeAlbums);
+    callWebService(("artists/" + id + "/albums"), parseData, 3);
+
+}
+
+function displayAlbums(data) {
+    //get placeholder element from page
+    var temp = document.getElementById("threeAlbums");
+    var listBox = document.createElement("div");
+    listBox.innerHTML = "";
+    for (var i = 0; i < 3; i++) {
+        if (i >= data.items.length) {
+            break;
+        } else {
+            var title = document.createElement("th");
+            if (data.items[i])
+                title.innerHTML = data.items[i].name;
+            var entry = document.createElement("img");
+            entry.src = data.items[i].images[0].url;
+            entry.style = "heigh:150px; width: 150px"
+            var field = document.createElement("td");
+            title.appendChild(entry);
+            field.appendChild(title);
+            listBox.appendChild(field);
+
+            temp.appendChild(listBox);
+
+        }
+    }
+
+
+
+
+}
+
+function displayRelatedArtists(data) {
+    //get placeholder element from page
+    var temp = document.getElementById("relatedArtists");
+    var listBox = document.createElement("ul");
+    listBox.innerHTML = "";
+    for (var i = 0; i < 5; i++) {
+        if (data.artists[i].name == null) {
+            break;
+        } else {
+            var entry = document.createElement("li");
+            entry.id = i;
+            entry.innerHTML = data.artists[i].name;
+            listBox.appendChild(entry);
+        }
+        temp.appendChild(listBox);
+       
+
+    }
+    
+
+    
+}
+function search() {
+
+    var input = document.getElementById("artist").value;
+    var listBox = document.getElementById("Artists");
+    listBox.innerHTML = "";
+
+    callWebService( "search?q=" + input + "&type=artist&market=US", parseData, 1);
+
+}
+
+
+ </script>
+</head>
+<body>
+
+    <h2>Assignment 4</h2>
+
+    <input type="text" id="artist">
+    <button onclick="search()">Submit</button>
+    <h2 id="searchResultText"></h2>
+    <ul id="Artists"></ul>
+    <div id="searchresults"></div>
+
+
+</body>
+</html>

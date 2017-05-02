@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title>Question 2</title>
+        <script type="text/javascript">
+   var number;
+   var numberValue;
+   var temp;
+   var encrypted;
+   number = window.prompt("Please enter your 4 digit number");
+  var n = number.length;
+   if(number.length != 4){
+     document.writeln("<h1>Incorrect number must be four digits.</h1>")
+   }
+    else{
+
+     for( var counter = 0; counter < 4; counter += 1){
+
+           numberValue = parseInt(number.charAt(counter));
+           numberValue = (numberValue + 7)%10;
+         if(counter == 0){
+           encrypted = numberValue.toString();
+         }
+         else{
+           encrypted = encrypted.concat(numberValue.toString());
+
+         }
+
+
+     }
+        temp = encrypted.slice(0,2);
+        encrypted = encrypted.slice(2,4);
+        encrypted = encrypted.concat(temp);
+
+
+        document.writeln("<h1>Encrypted Number:" + encrypted + "</h1>");
+  }
+        </script>
+</head>
+<body></body>
+</html>

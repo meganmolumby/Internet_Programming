@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Question 3</title>
+    <style type="text/css">
+       table {
+              text-align: center;
+              border-collapse: collapse;
+              background-color: peachpuff;
+        }
+
+        table, td, th {
+                        border: 1px solid black;
+                        padding: 4px;
+                        margin-top:20px;
+        }
+
+        th {
+            text-align: center;
+            color: white;
+            background-color: orange;
+        }
+
+        tr.oddrow {
+            background-color: white;
+        }
+    </style>
+    <script>
+    var headCount = 0;
+    var tailsCount = 0;
+    var headImage;
+
+    function start(){
+      var button = document.getElementById("flipButton");
+      button.addEventListener("click", setImage, false);
+      headImage = document.getElementById("head");
+    }
+    function flip(){
+      return (Math.floor(Math.random()*2) == 0);
+      //heads=0=true
+      //tails=1=false
+    }
+    function setImage(){
+      var coinValue = flip();
+      if(coinValue){//if heads
+        head.setAttribute("src", "head.png");
+        headCount += 1;
+      }
+      else{//tails
+        head.setAttribute("src", "tails.png");
+        tailsCount +=1;
+      }
+      updateTable();
+    }
+    function updateTable(){
+      var tableDiv = document.getElementById("tableDiv");
+      tableDiv.innerHTML = "<table>" + "<thead><tr><th>Side</th>" +
+        "<th>Count</th>" + "</tr></thead><tbody>" + "<tr><td>Heads</td><td>" + headCount
+        + "</td></tr>" + "<tr><td>Tails</td><td>" + tailsCount + "</td></tr>";
+
+
+    }
+    window.addEventListener("load", start, false);
+    </script>
+</head>
+<body>
+    <img id="head" src="head.png" alt="blank image">
+    <form action="#">
+        <input id="flipButton" type="button" value="Flip Coin">
+    </form>
+    <div id="tableDiv"></div>
+</body>
+</html>

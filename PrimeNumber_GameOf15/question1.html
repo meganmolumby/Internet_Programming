@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Question1</title>
+    <script type="text/javascript">
+      
+            var array = new Array(100);
+
+            //initialize all elements to 1 (true)
+            for (var p = 0; p < array.length; ++p) {
+                array[p] = 1;
+
+            }
+
+            //set index 0 and 1 to not prime(0/false)
+            array[0] = 0;
+            array[1] = 1;
+            //looping through array for values that are factors by each index setting to 0 if not prime
+            for (var i = 2; i < array.length; ++i) {
+                for (var x = i; x < array.length; ++x) {
+
+                    if (parseInt(array[x]) == 1) {
+
+                        value = x % i;
+
+
+                        if (i != x) {
+                            if (parseInt(value) == 0) {
+
+
+                                array[x] = 0;
+
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            //print out prime number
+            document.writeln(" <p>The Prime Numbers are: ");
+            for (var y = 2; y < array.length; y++) {
+
+                if (parseInt(array[y]) == 1) {
+                    document.writeln(y);
+
+                }
+            }
+     
+    </script>
+</head>
+<body>
+
+</body>
+</html>

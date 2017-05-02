@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HW1</title>
+  <style type = "text/css">
+    table         { text-align: center;
+                    border-collapse:collapse;
+                    background-color: peachpuff }
+    table, td, th { border:1px solid black;
+                    padding: 4px;}
+    th            { text-align: center;
+                    color: white;
+                    background-color: orange;}
+    tr.oddrow     { background-color: white;}
+    
+  </style>
+  <script type = "text/javascript" >
+        var number;
+        var square;
+        var cube;
+        document.writeln("<table>");
+        document.writeln("<caption>Question 1</caption>");
+        document.writeln("<thead><tr><th>Number</th>" );
+        document.writeln("<th>Square</th>");
+        document.writeln("<th>Cube</th>");
+        document.writeln("</tr></thead><tbody>");
+       for(var number = 0; number <= 5; number+=1){
+            square = Math.pow(number, 2);
+            cube = Math.pow(number, 3);
+            if(number % 2 != 0){
+                document.writeln( "<tr class= 'oddrow'><td>" + number + 
+                "</td><td>" + square + "</td><td>" + cube + 
+                 "</td></tr>");
+            }
+            else{
+              document.writeln( "<tr><td>" + number + 
+                "</td><td>" + square + "</td><td>" + cube + 
+                 "</td></tr>");
+           }
+  
+        }//end for loop
+       
+  
+    </script>
+  </head><body>
+
+
+<script id="jsbin-source-javascript" type="text/javascript"> </script></body>
+</html>
